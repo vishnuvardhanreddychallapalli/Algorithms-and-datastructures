@@ -1,0 +1,106 @@
+import java.util.*;
+import java.lang.*;
+
+public class Solution {
+    
+     
+      public  int top;
+       public String data[];
+      public  Solution()
+       {
+         top=-1;
+         data=new String[100];
+       }
+       
+       public  int size()
+       {
+          return top+1;
+       }
+       public  void push(String c)
+       {
+           if(size()==data.length)
+           {
+               String beta[]=new String[data.length*2];
+               int index=0;
+               while(index<data.length)
+               {
+                   beta[index]=data[index];
+                   index++;
+                   
+               }
+             data=beta;
+           }
+             
+           
+             top=top+1;
+             data[top]=c;
+          
+         
+       }
+       public char topp()
+       {
+         return  data[top].charAt(0);
+       }
+       public boolean isempty()
+       {
+           return (top==-1);
+       }
+      
+       
+       
+       public  String pop()
+       {
+           if(size()==0)
+           {
+             String str="";
+             return str;
+           }
+         else
+         {
+             String str=data[top--];
+             return str;
+         }
+       }
+     
+
+	public static boolean checkBalanced(String exp) {
+            Solution st=new Solution();
+      
+      
+          for(int i=0;i<exp.length();i++)
+          {
+            if(exp.charAt(i)=='(' || exp.charAt(i)=='{' || exp.charAt(i)=='[')
+                 st.push(""+exp.charAt(i));
+            else if(exp.charAt(i)==')' || exp.charAt(i)=='}' || exp.charAt(i)==']')
+            {
+               if(st.topp()=='(' && exp.charAt(i)==')')
+               {
+                   st.pop();
+               }
+               else  if(st.topp()=='{' && exp.charAt(i)=='}')
+               {
+                   st.pop();
+               }
+                  
+               else  if(st.topp()=='[' && exp.charAt(i)==']')
+               {
+                   st.pop();
+               }
+            }
+          }
+          if(st.isempty())
+          {
+             // System.out.println("balanced paranthesis");
+              return true;
+          }
+         
+          return false;
+		
+
+	}
+    public static void main(String[] args) {
+        String exp="{1+2*(2*3)+{34}-()";
+        boolean water=checkBalanced(exp);
+        System.out.println(water);
+    }
+}
