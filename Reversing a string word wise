@@ -1,0 +1,6 @@
+st=input().split()
+st.reverse()
+stp=""
+for row in st:
+  stp=stp+row+" "
+print(stp)
