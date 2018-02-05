@@ -1,0 +1,22 @@
+def leaders_array(lst):
+    bst=[]
+    bst.append(lst[len(lst)-1])
+    max_sofar=lst[len(lst)-1]
+    for i in range(len(lst)-2,-1,-1):
+        if(max_sofar<=lst[i]):
+            max_sofar=lst[i]
+            bst.append(max_sofar)
+    bst.reverse()
+    #print(bst)
+    return bst
+
+
+
+n=int(input())
+lst=input().split()
+lst=[int(row) for row in lst]
+lst=leaders_array(lst)
+st=""
+for row in lst:
+  st=st+str(row)+" "
+print(st)
