@@ -1,0 +1,43 @@
+def sumlist_column(lst):
+  col_lst=[]
+  for i in range(0,len(lst[0])):
+
+       sum=0
+       for j in range(0,len(lst)):
+           sum=sum+lst[j][i]
+       col_lst.append(sum)
+  return col_lst
+
+def sumlist_row(lst):
+    row_lst=[]
+    for i in range(len(lst)):
+        sum=0
+        for j in range(len(lst[i])):
+            sum=sum+lst[i][j]
+        row_lst.append(sum)
+    return row_lst
+
+
+
+k=input().strip().split(" ")
+m=int(k[0])
+n=int(k[1])
+cst=input().strip().split(" ")
+k=0
+lst=[]
+for i in range(m):
+    bst=[]
+    for j in range(n):
+        bst.append(int(cst[k]))
+        k+=1
+
+    lst.append(bst)
+
+row_lst = sumlist_row(lst)
+col_lst = sumlist_column(lst)
+max_row_index = row_lst.index(max(row_lst))
+max_col_index = col_lst.index(max(col_lst))
+if (row_lst[max_row_index] >= col_lst[max_col_index]):
+    print("row {} {}".format(max_row_index, row_lst[max_row_index]))
+else:
+    print("column {} {}".format(max_col_index, col_lst[max_col_index]))
