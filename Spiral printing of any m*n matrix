@@ -1,0 +1,55 @@
+def spiral_print(lst):
+    mincol,maxcol,minrow,maxrow=0,len(lst[0])-1,0,len(lst)-1
+    count=0
+    if(mincol==maxcol):
+        for i in range(maxrow+1):
+            print(lst[0][i],end=' ')
+            break;
+
+    elif(minrow==maxrow):
+        for i in range(maxcol+1):
+            print(lst[i][0],end=' ')
+            break;
+
+    while(mincol<maxcol and minrow<maxrow):
+        for i in range(mincol,maxcol+1):
+            if count==len(lst)*len(lst[0]):
+                break;
+            print(lst[minrow][i],end=' ')
+            count+=1
+        minrow+=1
+        for i in range(minrow,maxrow+1):
+            if count==len(lst)*len(lst[0]):
+                break;
+            print(lst[i][maxcol],end=' ')
+            count+=1
+        maxcol=maxcol-1
+        for i in range(maxcol,mincol-1,-1):
+            if count==len(lst)*len(lst[0]):
+                break;
+            print(lst[maxrow][i],end=' ')
+            count+=1
+        maxrow=maxrow-1
+        for i in range(maxrow,minrow-1,-1):
+            if count==len(lst)*len(lst[0]):
+                break;
+            print(lst[i][mincol],end=' ')
+            count+=1
+        mincol=mincol+1
+
+
+
+
+k=input().strip().split(" ")
+m=int(k[0])
+n=int(k[1])
+lst=input().strip().split(" ")
+k=0
+blst=[]
+for i in range(m):
+    bst=[]
+    for j in range(n):
+        bst.append(int(lst[k]))
+        k+=1
+    blst.append(bst)
+spiral_print(blst)
