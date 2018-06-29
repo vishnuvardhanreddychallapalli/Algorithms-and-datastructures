@@ -1,0 +1,57 @@
+int make_partition(int input[],int si,int ei,int size)
+{
+     int count=0;
+     for(int i=si+1;i<=ei;i++)
+     {
+       if(input[si]>=input[i])
+         count++;
+     }
+    int c=input[si+count];
+    input[si+count]=input[si];
+    input[si]=c;
+   int i=si;
+   int j=ei;
+   while(i<si+count && j>si+count)
+   {
+     if(input[i]<=input[si+count])
+     {
+       if(input[j]>input[si+count])
+       {
+         i++;
+         j--;
+       }
+       else
+       {
+         i++;
+       }
+     }
+     else if(input[i]>input[si+count])
+     {
+       if(input[j]<=input[si+count])
+       {
+         int c=input[i];
+         input[i]=input[j];
+         input[j]=c;
+         i++;
+         j--;
+       }
+       else
+       {
+         j--;
+       }
+     }
+   }
+  return si+count;
+}
+void quickSorter(int input[],int si,int ei,int size)
+{
+      if(si>=ei)
+        return;
+      int partition=make_partition(input,si,ei,size);
+      quickSorter(input,si,partition-1,size);
+      quickSorter(input,partition+1,ei,size);
+}
+void quickSort(int input[], int size) {
+   quickSorter(input,0,size-1,size);
+
+}
