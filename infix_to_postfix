@@ -1,0 +1,161 @@
+#include<iostream>
+#include<stack>
+#include<cstring>
+#include<climits>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+int value_of(char c)
+{
+    if(c=='+' || c=='-')
+            return 1;
+    else if(c=='*' || c=='/')
+             return 2;
+    else
+          return INT_MIN;
+}
+string infix_postfix(string s)
+{
+  //  cout<<"I am here......"<<endl;
+
+    string my_string="";
+    stack<char> op;
+    for(int i=0;s[i]!='\0';i++)
+    {
+     //   cout<<"My string is: "<<my_string<<endl;
+        if(s[i]>='0' && s[i]<='9')
+        {
+            /// This is an operand.... so add to string
+            my_string=my_string+s[i];
+        }
+        else
+        {
+            /// check for operators.....
+            if(op.empty()|| s[i]=='(')
+            {
+                op.push(s[i]);
+            }
+            else
+            {
+                /// if stack is not empty then we have to check for ')' and check for other operands.....
+                if(s[i]==')')
+                {
+
+                    /// Then i have to continuosly pop till i get '('
+                    while(op.top()!='(')
+                    {
+                        my_string=my_string+op.top();
+                        op.pop();
+                    }
+                    /// You will come outside when you hit the condition that is op.top=='(' remove it...
+                    if(op.top()=='(')
+                    {
+                        op.pop();
+                    }
+
+                }
+                else
+                {
+                    /// You will fall in else when you have other operators in the stack.....
+
+                    if(value_of(op.top())<value_of(s[i]))
+                    {
+                        /// Then push this guy in to the stack....
+                        op.push(s[i]);
+                    }
+                    else
+                    {
+                        /// You will come here when top of stack value is larger than the current operator.. so pop till you fail the condition..
+                        while(!op.empty() && value_of(op.top())>=value_of(s[i]))
+                        {
+                             my_string=my_string+op.top();
+                             op.pop();
+                        }
+                        op.push(s[i]);
+                    }
+                }
+            }
+
+
+
+        }
+    }
+    while(!op.empty())
+    {
+        my_string=my_string+op.top();
+        op.pop();
+    }
+   // cout<<"Is the stack empty...."<<op.size()<<endl;
+    return (my_string);
+}
+int evaluate_postfix(string post_fix)
+{
+
+    /// Here we need to set the operand stack ....
+    int my_ans=0;
+    int simple_ans=0;
+    stack<int> operand;
+    for(int i=0;post_fix[i]!='\0';i++)
+    {
+        //cout<<"Hi"<<endl;
+          //cout<<operand.size()<<" ";
+         if(post_fix[i]=='+' || post_fix[i]=='-' || post_fix[i]=='*' || post_fix[i]=='/')
+         {
+             /// Then you need to pick the two elements from the stack then put the result back to stack...
+             int char1=(operand.top());
+             operand.pop();
+             int char2=(operand.top());
+             operand.pop();
+             if(post_fix[i]=='+')
+             {
+                 operand.push(char1+char2);
+               //  cout<<"The answer at i :"<<i<<" "<<char2+char2<<endl;
+
+             }
+
+             else if(post_fix[i]=='-')
+             {
+                operand.push(char2-char1);
+               // cout<<"The answer at i :"<<i<<" "<<char2+char2<<endl;
+
+             }
+             else if(post_fix[i]=='*')
+             {
+                 operand.push(char1*char2);
+                 //cout<<"The answer at i :"<<i<<" "<<char2+char2<<endl;
+
+             }
+
+             else
+             {
+                  operand.push(char2/char1);
+                 // cout<<"The answer at i :"<<i<<" "<<char2+char2<<endl;
+             }
+
+         }
+         else
+         {
+             /// Just push the elements in to the stack (0-9)....
+             operand.push(post_fix[i]-'0');
+         }
+         //cout<<simple_ans<<" ";
+    }
+   // cout<<endl;
+    if(!operand.empty())
+    {
+      my_ans=(operand.top());
+      operand.pop();
+    }
+
+    return my_ans;
+}
+int main()
+{
+    cout<<"True answer is: "<<(7+6-3+7+(9*7)-7+8-4)<<endl;
+    string s="(7+6-3+7+(9*7)-7+8-4)";
+    string post_fix=infix_postfix(s);
+    cout<<post_fix<<endl;
+    int ans=evaluate_postfix(post_fix);
+    cout<<ans<<endl;
+    return 0;
+}
