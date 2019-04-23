@@ -2,7 +2,9 @@
 #include <vector>
 #include <unordered_set>
 #include <iterator>
-
+#include <unordered_map>
+#include <utility>
+#include <bits/stdc++.h>
 using namespace std;
 struct vectorHasher
 {
@@ -33,25 +35,63 @@ bool operator()(const vector<int> &vec1,const vector<int> &vec2) const
 };
 
 int main() {
-    vector<int> v1{1,2,3};
-    vector<int> v2{2,1,3};
-    vector<int> v3{3,2,1};
-    vector<int> v4{7,8,9};
-    unordered_set<std::vector<int>,vectorHasher,VectorComparator> us;
-    us.insert(v1);
-    us.insert(v2);
-    us.insert(v3);
-    us.insert(v4);
-    auto it=us.begin();
-    for(;it!=us.end();it++)
+    unordered_multimap<int,pair<int,int>> umm;
+    vector<int> arr{1,0,-1,0,-2,2};
+    int target=0;
+    unordered_set<vector<int>,vectorHasher,VectorComparator> us;
+    for(int i=0;i<arr.size()-1;i++)
     {
-        vector<int> v1=*it;
+        for(int j=i+1;j<arr.size();j++)
+        {
+            pair<int,int> p1;
+            p1.first=min(i,j);
+            p1.second=max(i,j);
+            auto it=umm.find((arr[i]+arr[j]));
+            if(it==umm.end())
+            {
+               umm.emplace(target-(arr.at(p1.first)+arr.at(p1.second)),p1);
+            }
+            else
+            {
+                pair<std::unordered_multimap<int,pair<int,int>>::iterator,std::unordered_multimap<int,pair<int,int>>::iterator> r=umm.equal_range((arr.at(p1.first)+arr.at(p1.second)));
+                auto it1=r.first;
+                while(it1!=r.second)
+                {
+                    pair<int,int>& p2=it1->second;
+                    //make sure you have all unique values..
+                    if(i!=p2.first && i!=p2.second && j!=p2.first && j!=p2.second)
+                    {
+                        vector<int> my_values;
+                        my_values.push_back(arr.at(p2.first));
+                        my_values.push_back(arr.at(p2.second));
+                        my_values.push_back(arr.at(i));
+                        my_values.push_back(arr.at(j));
+                        sort(my_values.begin(),my_values.end());
+                        us.insert(my_values);
+                        for(int q=0;q<my_values.size();q++)
+                           cout<<my_values.at(q)<<" ";
+                        cout<<endl;
+                        umm.emplace(target-(arr.at(i)+arr.at(j)),p1);
+                    }
+                    it1++;
+                }
+                
+            }
+            
+        }
+    }
+    //cout<<"****************(((((((((((()))))))))))))))))))))))************"<<endl;
+    for(auto it4=us.begin();it4!=us.end();it4++)
+    {
+        const std::vector<int> &v1=*it4;
+       // cout<<"V1 SIZE Is:: "<<v1.size()<<" :";
         for(int i=0;i<v1.size();i++)
         {
             cout<<v1.at(i)<<" ";
         }
         cout<<endl;
     }
-
+   
+    
     return 0;
 }
